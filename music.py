@@ -24,7 +24,8 @@ class Music(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        if ctx.author.voice:
+        print("join command")
+        if ctx.author.voice is not None:
             await ctx.author.voice.channel.connect()
             await ctx.send("Joined the voice channel!")
         else:
@@ -34,13 +35,19 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, input: str):
         vc = ctx.voice_client
+
         #testaa
-        if not vc: # If the bot is not connected to a voice channel, try to join the author's channel
-            await ctx.send("I'm not connected to a voice channel.")
-            return
+        #if not vc: # If the bot is not connected to a voice channel, try to join the author's channel
+        #   await ctx.send("I'm not connected to a voice channel.")
+        #  return
         
-        await self.join(ctx) #kokeilussa
-        await asyncio.sleep(1)  # Varmistaa, että bot on liittynyt kan
+        #if ctx.voice_client and ctx.author.voice:
+        #    if ctx.author.voice.channel != ctx.voice_client.channel:
+         #       await ctx.send("Bot is busy in a another channel. You need to be in the same voice channel as the bot to play music.")
+         #       return
+            
+        #await self.join(ctx) #kokeilussa
+        #await asyncio.sleep(1)  # Varmistaa, että bot on liittynyt kan
         #testaa loppuu
         
         if vc.is_playing():
@@ -58,6 +65,7 @@ class Music(commands.Cog):
                 return
             audio_url = info['url']
             title = info.get('title', 'Unknown')
+
         else:
             try:
                 info = ytdl.extract_info(f"ytsearch:{input}", download=False)['entries'][0]
@@ -71,9 +79,8 @@ class Music(commands.Cog):
             
 
         vc.play(discord.FFmpegPCMAudio(audio_url, **FFMPEG_OPTIONS))
-        await ctx.send(f"Now playing: **{title}**")
-        #message = await ctx.send(f"Now playing: **{title}**")
-        #await message.add_reaction("⏸️")
+        window = await ctx.send(f"Now playing: **{title}**")
+        await window.add_reaction("⏭️")
 
     @commands.command()
     async def leave(self, ctx):
