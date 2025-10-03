@@ -58,7 +58,6 @@ async def poll(ctx, *, question):
     await poll_message.add_reaction('👍')
     await poll_message.add_reaction('👎')
 
-
 @bot.command()
 async def help(ctx):
     embed = discord.Embed(title="Available commands:", description=help_text, color=0x00ff00)
@@ -66,10 +65,7 @@ async def help(ctx):
 
 @bot.command(name='8ball')
 async def ball(ctx, *, question):
-    print("ball")
     answer = random.choice(responses)
-    print(answer)
-    
     await ctx.send(f'Question: {question}\nAnswer: {answer}')
 
 asyncio.run(bot.load_extension("music"))

@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import requests
 import json
 
@@ -29,6 +29,7 @@ class Steam_updates(commands.Cog):
         return None
     
     
+    @tasks.loop(minutes=30)
     async def check_for_updates(self):
         cs_id = 730
         news = await self.fetch_cs2_updates()
@@ -40,7 +41,7 @@ class Steam_updates(commands.Cog):
             embed = discord.Embed(title=news["title"], url=news["url"], description=news["contents"], color=0x00ff00)
             embed.set_thumbnail(url=picture)
             await channel.send("New CS2 Update!", embed=embed)
-    
+
 
     async def searchs_id(self,ctx, appname:str):
         print("checking")
@@ -103,7 +104,7 @@ class Steam_updates(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.check_for_updates()
+        self.check_for_updates.start() # await?
 
 async def setup(bot):
     await bot.add_cog(Steam_updates(bot))
