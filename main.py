@@ -6,7 +6,7 @@ import logging
 import os
 import asyncio
 from bot_text_file import help_text, responses
-
+from google import genai
 
 load_dotenv()
 
@@ -21,12 +21,20 @@ intents.members = True
 intents.voice_states = True
 
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
-latest_update_id = None
+client = genai.Client()
 
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user.name}')
 
+# The client gets the API key from the environment variable `GEMINI_API_KEY`.
+@bot.command()
+async def ask(ctx,*, question):
+    response = client.models.generate_content(
+    model="gemini-2.5-flash-lite", contents=question, #max_output_tokens=500 säätöä
+    )
+    await ctx.send(response.text)
+    #print(response.text)
 
 @bot.event
 async def on_member_join(member):
