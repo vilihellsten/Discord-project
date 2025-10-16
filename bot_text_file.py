@@ -6,6 +6,9 @@ help_text = """
     !play <url or search term> - Play audio from a youtube URL or search term
     !stop - Stop the current audio
     !leave - Bot leaves the voice channel
+    !ask <question> - Ask a question to the AI
+    !check <app name> - Check for the latest update of a specific Steam app
+    !8ball <question> - Ask the magic 8-ball a question
     """
 
 responses = [
