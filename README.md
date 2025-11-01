@@ -1,4 +1,4 @@
-## Discord bot
+## Discord-bot
 !!Work in progress!!
 
 The bot has three main functions: 
@@ -6,4 +6,4 @@ The bot has three main functions:
 - fetch information about tracked apps from the Steam platform and post the results to a Discord channel
 - it also integrates with Gemini AI.
 
-Done using Discord.py
+Created using Discord.py
