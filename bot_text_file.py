@@ -1,20 +1,17 @@
 # TODO update this file with detailed steam-updates instructions
 help_text = """ 
+    !help - Show this help message
     !hello - Greet the bot
     !poll <question> - Create a poll with the given question
-    !help - Show this help message
     !join - Bot joins your voice channel
     !play <url or search term> - Play audio from a youtube URL or search term
-    !stop - Stop the current audio
     !leave - Bot leaves the voice channel
-    !ask <question> - Ask a question to the AI
-    !check <app name> - Check for the latest update of a specific Steam app
+    !ask <question> - Ask a question from the AI
     !8ball <question> - Ask the magic 8-ball a question
-    !steamupdates - Instructions for using the steam tracking feature
+    !steamupdates - Instructions for using the Steam tracking feature
     """
 
 steamupdates_instructions = """
-**Steam Update Tracking Instructions:** 
    Discord must have a channel called `steam-updates` where the bot has permission to post updates. 
 1. **Add a Game to Track:**
    Use the command `!add <AppID>` to start tracking a game. 

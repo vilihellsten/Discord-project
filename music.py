@@ -51,6 +51,17 @@ class Music(commands.Cog):
         if vc.is_playing():
             song = await self.search_youtube(ctx, input)
             self.song_queue.append(song)
+            #self.add_queue_to_player(vc)
+            # Realtime updating song list in player
+            """
+            if vc and vc.current_message:
+                try:
+                    embed = vc.current_message.embeds[0]
+                    queue_list.append(song['title'])
+                    embed.description += f"{queue_list}"
+                    await vc.current_message.edit(embed=embed)
+                except Exception as e:
+                    print("error udpating list")"""
             await ctx.send(f"Added **{song['title']}** to the queue")
             print("Added to queue:", song['title'])
             return
@@ -72,11 +83,19 @@ class Music(commands.Cog):
 
         print("Playing:", song['title'])
         vc.play(discord.FFmpegOpusAudio(song['url'], **FFMPEG_OPTIONS), after=after_playback)
-        
+
+        """
+        if self.song_queue:
+            queue_list = "\n".join(
+                [f"{index + 1}. {song['title']}" for index, song in enumerate(self.song_queue[:5])]
+            )
+        else:
+            queue_list = "The queue is currently empty."""
+                
         # Embeds the player, all the info needed
         embed = discord.Embed(
             title="🎵 Now Playing",
-            description=f"[{song['title']}]({song['webpage_url']})",
+            description=f"[{song['title']}]({song['webpage_url']})", # \n Song queue list: {queue_list}
             color=discord.Color.blurple()
             )
         if 'thumbnail' in song and song['thumbnail']:

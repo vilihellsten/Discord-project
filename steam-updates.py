@@ -3,18 +3,13 @@ from discord.ext import commands, tasks
 import json
 import re
 import aiohttp
-#from google import genai
-#from google.genai import types
+from google import genai
+from google.genai import types
 
-""" 
-#gemini-2.5-flash-lite parempi mutta enemmän tokeneita vievä
-response = client.models.generate_content(
-model="gemini-2.0-flash-lite",config = types.GenerateContentConfig(system_instruction="Format this text so it can be posted in discord,just give one text because after you are done it will be immeaditelly posted in discord, Keep URL clickable, NO EMOJIS"), contents=raw_text, #max_output_tokens=100 säätöä
-)
 
-print(response.text)
-#client = genai.Client()
-"""
+gemini_instructions = "Format this text so it can be posted in discord, you can not edit the text at all, only the formating,just give one text because after you are done it will be immeaditelly posted in discord, Keep URL clickable,no HTML-code, NO EMOJIS"
+client = genai.Client()
+
 
 class Steam_updates(commands.Cog):
     def __init__(self, bot):
@@ -32,7 +27,7 @@ class Steam_updates(commands.Cog):
         
         async with aiohttp.ClientSession() as session:
 
-            # Fetch latest header image of hte game
+            # Fetch latest header image of the game
             async with session.get(picture_url) as resp:
                 if resp.status == 200:
                     picture_json = await resp.json()
@@ -104,10 +99,16 @@ class Steam_updates(commands.Cog):
             await ctx.send(f"Already tracking updates for ID: {appid} , {appname}.", delete_after=15)
             return
         
-        # Fetch game updtate with appid
+        # Fetch game update with appid
         news = await self.fetch_game_update(appid)
+        print(news['contents'])
 
-        embed = discord.Embed(title=news["title"], url=news["url"], description=news["contents"], color=0x00ff00)
+        # Formats the applications update information
+        response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",config = types.GenerateContentConfig(system_instruction=gemini_instructions), contents=news['contents'] #max_output_tokens=100 säätöä
+        )
+
+        embed = discord.Embed(title=news["title"], url=news["url"], description=response.text[:800] + ("..." if len(response.text) > 800 else ""), color=0x00ff00)
         embed.set_image(url=news["picture"])
         await ctx.send(embed=embed)
         
@@ -144,6 +145,7 @@ class Steam_updates(commands.Cog):
         # Gives a number : name for each game in tracked_games
         for appname in self.tracked_games.keys(): 
             message += f"{i} : {appname}\n" 
+            i = i + 1
 
         embed = discord.Embed(title="Currently tracked applications:", description=message, color=0x00ff00)
         await ctx.send(embed=embed)

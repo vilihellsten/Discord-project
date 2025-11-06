@@ -32,7 +32,7 @@ async def on_ready():
 @bot.command()
 async def ask(ctx, *, question):
     response = client.models.generate_content(
-    model="gemini-2.5-flash-lite", contents=question, #max_output_tokens=100 and version needs some thought 
+    model="gemini-2.5-flash-lite", contents=question, #max_output_tokens=150
     )
     await ctx.send(response.text)
     
@@ -67,7 +67,7 @@ async def hello(ctx):
 @bot.command()
 async def steamupdates(ctx):
     print("steamupdates command")
-    embed = discord.Embed(title="Steam Update Instructions", description=steamupdates_instructions, color=0x00ff00)
+    embed = discord.Embed(title="Steam Update Instructions:", description=steamupdates_instructions, color=0x00ff00)
     await ctx.send(embed=embed)
 
 # Simple way to make polls in server
