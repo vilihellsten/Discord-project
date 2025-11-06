@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import logging
 import os
 import asyncio
-from bot_text_file import help_text, responses, steamupdates_instructions
+from Data.bot_text_file import help_text, responses, steamupdates_instructions
 from google import genai
 
 load_dotenv()
@@ -91,7 +91,7 @@ async def ball(ctx, *, question):
     await ctx.send(f'Question: {question}\nAnswer: {answer}')
 
 # Loads extensions
-asyncio.run(bot.load_extension("music"))
-asyncio.run(bot.load_extension("steam-updates"))
+asyncio.run(bot.load_extension('Cogs.music'))
+asyncio.run(bot.load_extension('Cogs.steam_updates'))
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
