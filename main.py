@@ -93,5 +93,6 @@ async def ball(ctx, *, question):
 # Loads extensions
 asyncio.run(bot.load_extension('Cogs.music'))
 asyncio.run(bot.load_extension('Cogs.steam_updates'))
+#asyncio.run(bot.load_extension('Cogs.gemini'))
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)

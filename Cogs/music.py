@@ -120,18 +120,6 @@ class Music(commands.Cog):
         else:
             return
         
-    # Skips the current song
-    async def skip(self, ctx): 
-        print("skip function")
-        await asyncio.sleep(1)
-
-        # If queue is empty, stop playing and remove buttons
-        if not self.song_queue:
-            await self.remove_buttons(ctx.voice_client)
-            await self.stop(ctx)
-        
-        # If queue is not empty, stopping trigger after_playback
-        ctx.voice_client.stop()
 
     # Searches youtube for media, users can give URL or search term
     async def search_youtube(self,ctx,input):
@@ -164,6 +152,19 @@ class Music(commands.Cog):
             await ctx.voice_client.disconnect()
         else:
             await ctx.send("I'm not in a voice channel.")
+
+    # Skips the current song
+    async def skip(self, ctx): 
+        print("skip function")
+        await asyncio.sleep(1)
+
+        # If queue is empty, stop playing and remove buttons
+        if not self.song_queue:
+            return
+        
+        # If queue is not empty, stopping trigger after_playback
+        await self.remove_buttons(ctx.voice_client)
+        ctx.voice_client.stop()
 
     # Stops playback, clears song_queue and removes buttons, remove command portion?
     @commands.command()
@@ -210,8 +211,15 @@ class MusicControls(discord.ui.View):
     async def skip_button(self, interaction: discord.Interaction, _):
         # Permission check for buttons
         if self.users_in_voice_channel(interaction.user):
-            await interaction.response.defer()
-            await self.music_cog.skip(self.ctx)
+            #await interaction.response.defer()
+            print(self.music_cog.song_queue)
+            if not self.music_cog.song_queue:
+                await interaction.response.send_message(
+                    "Nothing to skip, song queue is empty", ephemeral=True
+                )
+            else:
+                await self.music_cog.skip(self.ctx)
+
         else:
             await interaction.response.send_message(
                 "You must be in the same voice channel as the bot to use this.", ephemeral=True
