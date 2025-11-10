@@ -72,7 +72,7 @@ class Steam_updates(commands.Cog):
         
         # Loads local steamapps.json list containing appid and name, "{"appid": 440, "name": "Team Fortress 2"}"
         try:
-            with open('data/steamapps.json', 'r', encoding='utf-8') as f: 
+            with open('src/data/steamapps.json', 'r', encoding='utf-8') as f: 
                 data = json.load(f) 
             apps = data["applist"]["apps"]  
         except FileNotFoundError:
@@ -116,7 +116,7 @@ class Steam_updates(commands.Cog):
         print(self.tracked_games)
 
         # Save changes to the Json file
-        with open('data/tracked_games.json', 'w') as f:
+        with open('src/data/tracked_games.json', 'w') as f:
             json.dump(self.tracked_games, f,)
             print("Tracked games saved to 'tracked_games.json'.")
 
@@ -166,7 +166,7 @@ class Steam_updates(commands.Cog):
         del self.tracked_games[appname]
 
         # Save changes to the Json file
-        with open('data/tracked_games.json', 'w') as f:
+        with open('src/data/tracked_games.json', 'w') as f:
             json.dump(self.tracked_games, f,)
             print(f"Removed {appname} from 'tracked_games.json'.")
         await ctx.send(f"Stopped tracking updates for '{appname}'.")
@@ -198,7 +198,7 @@ class Steam_updates(commands.Cog):
 
         # If new updates are found, update the latest_update_id and save the changes
         if updated:
-            with open('data/tracked_games.json', 'w') as f:
+            with open('src/data/tracked_games.json', 'w') as f:
                 json.dump(self.tracked_games, f,)
                 print(f"{appname}, updated latest_update_id variable to 'tracked_games.json'.")
                 
@@ -207,7 +207,7 @@ class Steam_updates(commands.Cog):
     # Load all tracked games from a JSON file on startup
     async def load_tracked_games(self):
         try:
-            with open('data/tracked_games.json', 'r') as f:
+            with open('src/data/tracked_games.json', 'r') as f:
                 self.tracked_games = json.load(f)
                 print("Tracked games loaded from 'tracked_games.json'.")
         except FileNotFoundError:
