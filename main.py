@@ -23,6 +23,9 @@ intents.voice_states = True
 
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
+## Add better error handling for Steam API failures and missing channel conditions
+## Improve the music queue display and add support for `!queue` command
+## Add documentation for environment variables and `steamapps.json` usage
 
 @bot.event
 async def on_ready():
